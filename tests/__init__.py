@@ -13,4 +13,8 @@
 #
 #   python -m unittest
 
+__author__ = "Hugh Coleman"
+__copyright = """Copyright (c) 2013 - 2014 Brian Neal
+Copyright (c) 2020 Hugh Coleman
+"""
 __version__ = "0.1.0"
