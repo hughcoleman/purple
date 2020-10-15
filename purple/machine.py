@@ -13,7 +13,8 @@
 (Type-B) Cipher Machine.
 """
 
-import purple.switch
+from purple.switch import SteppingSwitch
+from purple.wiring import SIXES, TWENTIES_I, TWENTIES_II, TWENTIES_III
 
 from collections import Counter
 import string
@@ -113,8 +114,8 @@ class Purple97:
         # First read the sixes and middle switch
         # positions before stepping anything. Use these latched values in
         # the decision processes for stepping a twenties. This is crucial!
-        sixes_pos = self.sixes.pos
-        middle_pos = self.middle_switch.pos
+        sixes_pos = self.sixes.position
+        middle_pos = self.middle_switch.position
 
         # Now we can step the sixes. It unconditionally steps after every
         # letter is processed.
@@ -185,11 +186,11 @@ class Purple97:
             raise Purple97Error("switches_pos must have length of 4")
 
         # Create switches with correct starting positions
-        self.sixes = purple.switch.create_switch(purple.switch.SIXES, switches_pos[0])
+        self.sixes = SteppingSwitch(SIXES, switches_pos[0])
         self.twenties = [
-            purple.switch.create_switch(purple.switch.TWENTIES_1, switches_pos[1]),
-            purple.switch.create_switch(purple.switch.TWENTIES_2, switches_pos[2]),
-            purple.switch.create_switch(purple.switch.TWENTIES_3, switches_pos[3]),
+            SteppingSwitch(TWENTIES_I, switches_pos[1]),
+            SteppingSwitch(TWENTIES_II, switches_pos[2]),
+            SteppingSwitch(TWENTIES_III, switches_pos[3]),
         ]
 
         # Validate fast & middle switch parameters
