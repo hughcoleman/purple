@@ -9,35 +9,131 @@
 # the PURPLE (Type-B) Cipher Machine. It is released under the MIT License (see
 # LICENSE.)
 
-""" Implement a stepping switch.
- 
-Stepping switches were responsible for performing the obfuscation of sensitive 
-materials. """
+""" Implements a multi-layered ("multi-poled") stepping switch.
 
-class SteppingSwitchError(RuntimeError):
-    pass
+Stepping switches are capable of routing electrical signals to one of many
+different output locations. This made them essential to the construction of the
+PURPLE machine, being responsible for performing the obfuscation of the
+plaintext.
+
+In simple, a multi-layered stepping switch is structured like this.
+
+                                       o
+                                      /
+                   #                 /                     #                   
+                      #  #          /                #  #                     
+        Layer 1    .        #  #   /           #  #        .                        
+        Layer 2    .  .  .        # # # # # #        .  .  .                       
+        Layer 3    .  .  .  .  .               .  .  .  .  .
+        Layer 4    .  .  .  .  .  A . . . . .  .  .  .  .  .
+                      .  .  .  .  B . . . . .  .  .  .  .
+                            .  .  C . . . . .  .  .
+                                  D . . . . . 
+
+Currently, an electrical signal fed into the wiper arm on layer 2 will emerge
+at 'B'. However, if the arm were to step, then the signal would be diverted
+elsewhere. This construction allows stepping switches to be used in performing 
+monoalphabetic substitution ciphers. The outputs can be wired together to
+encode a different alphabet depending on the position of the wiper arm.
+
+Below are the substitution tables encoded into the routing_logic of the four stepping
+switches in the PURPLE machine. Each row represents a layer; each column
+represents a different position of the wiper arm.
+
+    CONSONANTS I                    CONSONANTS II    
+    B  HFVDXCTBVPZGSNPKJMQBLWTGR    B  SPFHJGKZLMNCTXWZDGRKVBTXQ
+    C  XGBRHNJZLKBFVPTSDQJCZSWKM    C  LHWNCVFBKPJDMTRDHSZNXGKQB
+    D  RTQZKLHJNVTSMJCWGFLDPCXBF    D  BSGCQRDTJNRLSWPXFZQBHPMKV
+    F  BVHFZRWTKLNCXDJBWRPFGQMSK    F  GCKZDJNMSWFMBPXCRLVHBZQTS
+    G  MRSHQJLPZDCQTKFPVWZGMBNXL    G  VFTRLMXSGKWQVDBFCMGXPHNZJ
+    H  FBNTGXMRWZVXCSKNQDTHVJZLP    H  XLBJFLQKCTZRDQJGPVWRSNHMF
+    J  CZXKWHQGJFLHNTSVXCRJBMGPD    J  DKPWVXCRFZHSQLMNTBKGZRXJT
+    K  JSPXFDBWRMFTKHXRZVMKQGLCN    K  CTSPRZLNQVBTLMHRGXFWJKGBD
+    L  QDTCMWVSBRKPLFGZRNXLJXBHV    L  MXZSBKPWVGQJFHNLWQCVTLDCR
+    M  LKWPDQCMTGSRJZBTNXHMSVFDZ    M  KVRDPQTGBHXNJCSMZPSDLJFWG
+    N  KWMVTPGQSJMKDCNQLZBNFHPRX    N  NGQKWBMDNLPZHVGWJFTMDXSRC
+    P  TNDLSKFHGWQJRGLXMBCPDZQVH    P  WNVGZCVJHDSPKRLTXCBQNFZHM
+    Q  DPJGRMNKXCDVWBZLCHNQTLJFS    Q  PZNMHTRQXFGWCNKSBJLPQDVLW
+    R  WQRBPSXDCTWMQLVJHPFRKNHZG    R  TJCBNDSVWXLHRFZPSHXZMQCGK
+    S  SMKNJTZFHQRWPXHDBLGSWPVTC    S  HMJVTFZXRQTBGJVKLNDSCMWPN
+    T  NXZMCVRLPHGDBWRFSJDTNKCQW    T  QWLXSPHFMJCGNZFJKRHTWVBDL
+    V  GCFJVZKNFBHLGMQCPSWVXDRWT    V  ZBHLGNWCDBVKPSDQMTJFKWRVX
+    W  PHLQNFSVMXJBZRDGTKVWCFSMJ    W  FRDTKWBLZRMVXGQHNKMCFTJSP
+    X  ZLCSBGDXQSPNHVWMFGKXRTDJB    X  RQMFXHJPTSKXWBCVQDPJGSLNZ
+    Z  VJGWLBPCDNXZFQMHKTSZHRKNQ    Z  JDXQMSGHPCDFZKTBVWNLRCPFH
+
+    CONSONANTS III                  VOWELS
+    B  JSCTPQFLGNXBDLKWRVMZNTHKQ    A  EYAOIEYIUOEUIOAUYEAIYAYOU
+    C  XVNDWLJHRTKPFNQTBXSLZGMJC    E  AIUIYAUYOUAOAEYOEIEAUIOYE
+    D  NRZPTGCFWLDVMHRSJBCKQMXGV    I  IUOEAYOAEIOYEUEIUOIYAYUAO
+    F  DCPLFHSMVWSQPGTFZNRHKXTBJ    O  UEYAOUEOYEUIYAIYIAUOEOAEI
+    G  ZPBFLKVWQDRLBMXCHJNPTFGSR    U  OAEYUIAUIAYEOIUAOUYEOEIUY
+    H  BQXZDJMTSPGJWFPVQCHNMWLRK    Y  YOIUEOIEAYIAUYOEAYOUIUEIA
+    J  MKFHSPXKNGBRCVZQTWJCWSBLD
+    K  HDMXQVGRPSNCKXJPWFBGRVZTL
+    L  TBLWHRKGJMCSRQMHPDTFXBVNZ
+    M  PXRCZWTPKBMFQSDNLKZJHDFVG
+    N  VLHGKZBVDRPGXJSZFMQTSCNWT
+    P  QFSKCMPBHVTNJCLXVGDRFZWHM
+    Q  KMQRJCDZBCWHTPFRGSLVBNJXH
+    R  LJDNMXQSCFZTHWVGNPKDVHRZB
+    S  FNJMGNHQZXVDSRBLCTWSJKQDP
+    T  WZTBXSRXFHJKLZNBDLVMGQCPS
+    V  GTWSRFZCLKQWVBGKMHXQDJPFN
+    W  RHKVBDLNMJFXZTCJSQGXLPKCW
+    X  SWGQVBNJTQLZGKHDXZPWCRDMF
+    Z  CGVJNTWDXZHMNDWMKRFBPLSQX
+
+Numerical versions of this data is available in purple.logic under names 
+`SIXES`, `TWENTIES_I`, `TWENTIES_II`, and `TWENTIES_III`.
+
+"""
 
 class SteppingSwitch:
 
     def step(self):
-        """ Step the wiper arm one position forwards. """
-        self.position = (self.position + 1) % len(self.logic)
+        """ Step the wiper arm of this SteppingSwitch one position forwards, 
+        looping back to zero in the case of an overflow. 
+        """
 
-    def encrypt(self, n):
-        """ Feed the value 'n' backwards through the stepping switch. """
-        return self.logic[self.position].index(n)
+        self.position = (self.position + 1) % self.size
 
-    def decrypt(self, n):
-        """ Feed the value 'n' forwards through the stepping switch. """
-        return self.logic[self.position][n]
+    def encrypt(self, char):
+        """ Feed the supplied character backwards through the stepping switch's
+        logical network.
+        """
+        
+        # TODO: generate inverse logic tables to ensure that this is more
+        # efficient
+        return {self.routing_logic[k][self.position]: k for k in self.routing_logic.keys()}[char]
+
+    def decrypt(self, char):
+        """ Feed the supplied chararacter forwards through the stepping 
+        switch's logical network.
+        """
+
+        return self.routing_logic[char][self.position]
     
-    def __init__(self, logic, position=0):
-        """ Construct a stepping switch with the given logic. """
-        self.logic = logic
+    def __init__(self, routing_logic, position=0, size=25):
+        """ Construct a stepping switch with the given logical network. 
+        
+         - `routing_logic` expects a dictionary, with keys representing the 
+           different layers, each associated with a list of output values.
+         - `position` expects an integer specifying the initial position of the
+           rotor arm.
+         - `size` expects an integer specifying the number of possible arm 
+           positions in the stepping switch. This defaults to 25, as this was
+           the size of all four stepping switches in the original PURPLE
+           machine.
+        
+        """
+
+        if any(size != len(vs) for vs in routing_logic.values()):
+            raise ValueError(f"uneven routing_logic matrix")
+        
+        if (position < 0) or (size <= position):
+            raise ValueError(f"cannot set stepper arm position to {position}")
+        
+        self.routing_logic = routing_logic
         self.position = position
-
-        if any(len(self.logic[0]) != len(self.logic[n]) for n in range(len(logic))):
-            raise SteppingSwitchError("The specific logic matrix has uneven dimensions.")
-    
-        if (self.position < 0) or (self.position >= len(self.logic)):
-            raise SteppingSwitchError("Illegal switch position.")
+        self.size = size

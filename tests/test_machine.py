@@ -11,10 +11,7 @@
 
 import unittest
 
-from purple.machine import Purple97, Purple97Error
-from purple.switch import SteppingSwitchError
-
-import string
+import purple.machine
 
 # This is the first part of the 14-part message which was delivered by the 
 # Japanese to the U.S. Government on December 7, 1941. Illegible characters are
@@ -25,107 +22,35 @@ plaintext  = "FOVTATAKIDASINIMUIMINOMOXIWOIRUBESIFYXXFCKZZRDXOOVBTNFYXFAEMEMORAN
 
 class TestPurple97(unittest.TestCase):
 
-    def test_construction(self):
-        Purple97()
-        Purple97([0, 1, 2, 3])
-        Purple97([0, 1, 2, 3], 1)
-        Purple97([0, 1, 2, 3], 2, 1)
-        Purple97((0, 1, 2, 3), 2, 1, string.ascii_uppercase)
-        Purple97((0, 1, 2, 3), 2, 1, string.ascii_lowercase)
-        Purple97(alphabet=string.ascii_lowercase)
-        Purple97(fast_switch=3, middle_switch=1)
+    def test__encrypt(self):
+        """ Ensure that Purple97.encrypt properly encrypts the supplied
+        plaintext.
+        """
 
-    def test_construct_bad_positions(self):
-        self.assertRaises(Purple97Error, Purple97, [])
-        self.assertRaises(Purple97Error, Purple97, [1])
-        self.assertRaises(Purple97Error, Purple97, [1, 1, 1, 1, 1])
-        self.assertRaises(SteppingSwitchError, Purple97, [1, 1, 1, 100])
+        machine = purple.machine.Purple97(
+            positions={6: 8, 20: (0, 23, 5)}, 
+            speeds=(2, 3, 1), 
+            plugboard="NOKTYUXEQLHBRMPDICJASVWGZF"
+        )
 
-    def test_construct_bad_switches(self):
-        self.assertRaises(Purple97Error, Purple97, fast_switch=0)
-        self.assertRaises(Purple97Error, Purple97, fast_switch=4)
-        self.assertRaises(Purple97Error, Purple97, fast_switch=-1)
+        self.assertEqual(
+            ciphertext,
+            machine.encrypt(plaintext)
+        )
 
-        self.assertRaises(Purple97Error, Purple97, middle_switch=0)
-        self.assertRaises(Purple97Error, Purple97, middle_switch=4)
-        self.assertRaises(Purple97Error, Purple97, middle_switch=-1)
+    def test__decrypt(self):
+        """ Ensure that Purple97.decrypt properly decrypts the supplied
+        ciphertext.
+        """
 
-        self.assertRaises(Purple97Error, Purple97, fast_switch=2)
-        self.assertRaises(Purple97Error, Purple97, fast_switch=1, 
-            middle_switch=1)
-        self.assertRaises(Purple97Error, Purple97, fast_switch=2, 
-            middle_switch=2)
-        self.assertRaises(Purple97Error, Purple97, fast_switch=3, 
-            middle_switch=3)
+        machine = purple.machine.Purple97(
+            positions={6: 8, 20: (0, 23, 5)}, 
+            speeds=(2, 3, 1), 
+            plugboard="NOKTYUXEQLHBRMPDICJASVWGZF"
+        )
 
-        self.assertRaises(Purple97Error, Purple97, fast_switch=0, 
-            middle_switch=1)
-        self.assertRaises(Purple97Error, Purple97, fast_switch=0, 
-            middle_switch=0)
-        self.assertRaises(Purple97Error, Purple97, fast_switch=0, 
-            middle_switch=4)
+        self.assertEqual(
+            plaintext,
+            machine.decrypt(ciphertext)
+        )
 
-    def test_construct_bad_alphabet(self):
-        alphabets = [
-            "",
-            "1",
-            "!" * 26,
-            "DEFGHIJKLMNOPQRSTUVWXYZ",
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZEFGHIJ",
-            "ABCDEFGHIJKLMABCDEFGHIJKLM",
-            "M" * 26
-        ]
-
-        for alphabet in alphabets:        
-            self.assertRaises(Purple97Error, Purple97, alphabet=alphabet)
-
-    def test_from_keysheet(self):
-        Purple97.from_keysheet("9-1,2,3-23")
-        Purple97.from_keysheet("1-1,1,1-13")
-        Purple97.from_keysheet("25-25,25,25-31")
-        Purple97.from_keysheet("5-20,7,18-21", plugboard=string.ascii_uppercase)
-
-    def test_bad_from_keysheet(self):
-        self.assertRaises(Purple97Error, Purple97.from_keysheet, "0-1,2,3-13")
-        self.assertRaises(Purple97Error, Purple97.from_keysheet, "26-1,2,3-13")
-        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-1,0,3-13")
-        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-1,2,26-13")
-        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-1,2,26-03")
-        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-1,2,26-00")
-        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-1,2,26-14")
-
-        self.assertRaises(Purple97Error, Purple97.from_keysheet, "bad string")
-        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-2-1,2,26-14")
-        self.assertRaises(Purple97Error, Purple97.from_keysheet, "a-9,2,20-13")
-        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-a,2,20-13")
-        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-9,a,20-13")
-        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-9,2,a-13")
-        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-9,2,20-a3")
-        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-9,2,20-1a")
-        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-9,2,20-123")
-
-    def test_decrypt_part_1_message(self):
-        self.assertEqual(len(ciphertext), len(plaintext))
-
-        machine = Purple97.from_keysheet(
-            settings="9-1,24,6-23",
-            plugboard="NOKTYUXEQLHBRMPDICJASVWGZF")
-
-        self.assertEqual(plaintext, machine.decrypt(ciphertext))
-
-    def test_encrypt_part_1_message(self):
-        self.assertEqual(len(ciphertext), len(plaintext))
-
-        machine = Purple97.from_keysheet(
-            settings="9-1,24,6-23",
-            plugboard="NOKTYUXEQLHBRMPDICJASVWGZF")
-
-        # substitute illegible characters with "X"s.
-        plaintext_ = plaintext.replace("-", "X")
-
-        mismatches = 0
-        for ct, ept in zip(ciphertext, machine.encrypt(plaintext_)):
-            if ct != ept and ct != "-":
-                mismatches = mismatches + 1
-
-        self.assertTrue(mismatches <= 0)

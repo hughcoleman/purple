@@ -11,58 +11,83 @@
 
 import unittest
 
-from purple.switch import SteppingSwitch, SteppingSwitchError
-from purple.wiring import SIXES
+import purple.switch
+import purple.logic
 
 class TestSwitch(unittest.TestCase):
 
-    def test_construction(self):
-        bad_wiring = [
-            [1, 2, 0],
-            [2, 1],
-            [0, 1, 2]
+    def test__illegal_routing_logic(self):
+        """ Ensure that SteppingSwitch.__init__ raises a ValueError if an
+        incorrectly-balanced routing matrix is supplied.
+        """
+
+        illegal_routing_logic = {
+            0: [0, 1, 2],
+            1: [2, 1],
+            2: [1, 1, 2]
+        }
+
+        self.assertRaises(ValueError, purple.switch.SteppingSwitch, {
+            "routing_logic": illegal_routing_logic,
+            "position": 0,
+            "size": 3
+        })
+
+    def test__illegal_arm_position(self):
+        """ Ensure that SteppingSwitch.__init__ raises a ValueError if an
+        illegal initial arm position is supplied.
+        """
+
+        illegal_positions = [
+            -1,
+            25,
+            99
         ]
 
-        good_wiring = [
-            [1, 2, 0],
-            [2, 1, 0],
-            [0, 1, 2]
-        ]
+        for position in illegal_positions:
+            self.assertRaises(ValueError, purple.switch.SteppingSwitch, {
+                "routing_logic": {},
+                "position": position
+            })
 
-        self.assertRaises(SteppingSwitchError, SteppingSwitch, bad_wiring)
-        self.assertRaises(SteppingSwitchError, SteppingSwitch, bad_wiring,
-            position=0)
-        self.assertRaises(SteppingSwitchError, SteppingSwitch, good_wiring,
-            position=-1)
-        self.assertRaises(SteppingSwitchError, SteppingSwitch, good_wiring,
-            position=3)
-        self.assertRaises(SteppingSwitchError, SteppingSwitch, bad_wiring,
-            position=3)
+    def test__step(self):
+        """ Ensure that SteppingSwitch.step correctly tracks the position of 
+        the arm.
+        """
+        switch = purple.switch.SteppingSwitch(purple.logic.SIXES)
 
-    def test_step(self):
-        switch = SteppingSwitch(SIXES)
-
-        for n in range(25 * 2 + 1):
-            self.assertEqual(n % 25, switch.position)
+        for position in range(25*2 + 1):
+            self.assertEqual(position % 25, switch.position)
             switch.step()
-            self.assertEqual((n + 1) % 25, switch.position)
-
-    def test_decrypt(self):
-        switch = SteppingSwitch(SIXES)
-
-        self.assertEqual(switch.decrypt(0), 1)
-        self.assertEqual(switch.decrypt(1), 0)
-        self.assertEqual(switch.decrypt(2), 2)
-        self.assertEqual(switch.decrypt(3), 4)
-        self.assertEqual(switch.decrypt(4), 3)
-        self.assertEqual(switch.decrypt(5), 5)
     
-    def test_encrypt(self):
-        switch = SteppingSwitch(SIXES)
+    def test__encrypt(self):
+        """ Ensure that SteppingSwitch.encrypt properly routes the supplied
+        signal.
+        """
 
-        self.assertEqual(switch.encrypt(0), 1)
-        self.assertEqual(switch.encrypt(1), 0)
-        self.assertEqual(switch.encrypt(2), 2)
-        self.assertEqual(switch.encrypt(3), 4)
-        self.assertEqual(switch.encrypt(4), 3)
-        self.assertEqual(switch.encrypt(5), 5)
+        switch = purple.switch.SteppingSwitch(purple.logic.SIXES)
+
+        for position in range(25):
+            for pt in range(6):
+                self.assertEqual(
+                    purple.logic.SIXES[switch.encrypt(pt)][position],
+                    pt
+                )
+            
+            switch.step()
+
+    def test__decrypt(self):
+        """ Ensure that SteppingSwitch.decrypt properly routes the supplied
+        signal.
+        """
+
+        switch = purple.switch.SteppingSwitch(purple.logic.SIXES)
+
+        for position in range(25):
+            for ct in range(6):
+                self.assertEqual(
+                    purple.logic.SIXES[ct][position],
+                    switch.decrypt(ct)
+                )
+            
+            switch.step()
