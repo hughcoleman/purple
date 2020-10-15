@@ -79,46 +79,46 @@ class TestPurple97(unittest.TestCase):
         for alphabet in alphabets:        
             self.assertRaises(Purple97Error, Purple97, alphabet=alphabet)
 
-    def test_from_key_sheet(self):
-        Purple97.from_key_sheet("9-1,2,3-23")
-        Purple97.from_key_sheet("1-1,1,1-13")
-        Purple97.from_key_sheet("25-25,25,25-31")
-        Purple97.from_key_sheet("5-20,7,18-21", alphabet=string.ascii_uppercase)
+    def test_from_keysheet(self):
+        Purple97.from_keysheet("9-1,2,3-23")
+        Purple97.from_keysheet("1-1,1,1-13")
+        Purple97.from_keysheet("25-25,25,25-31")
+        Purple97.from_keysheet("5-20,7,18-21", plugboard=string.ascii_uppercase)
 
-    def test_bad_from_key_sheet(self):
-        self.assertRaises(SteppingSwitchError, Purple97.from_key_sheet, "0-1,2,3-13")
-        self.assertRaises(SteppingSwitchError, Purple97.from_key_sheet, "26-1,2,3-13")
-        self.assertRaises(SteppingSwitchError, Purple97.from_key_sheet, "1-1,0,3-13")
-        self.assertRaises(SteppingSwitchError, Purple97.from_key_sheet, "1-1,2,26-13")
-        self.assertRaises(SteppingSwitchError, Purple97.from_key_sheet, "1-1,2,26-03")
-        self.assertRaises(SteppingSwitchError, Purple97.from_key_sheet, "1-1,2,26-00")
-        self.assertRaises(SteppingSwitchError, Purple97.from_key_sheet, "1-1,2,26-14")
+    def test_bad_from_keysheet(self):
+        self.assertRaises(Purple97Error, Purple97.from_keysheet, "0-1,2,3-13")
+        self.assertRaises(Purple97Error, Purple97.from_keysheet, "26-1,2,3-13")
+        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-1,0,3-13")
+        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-1,2,26-13")
+        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-1,2,26-03")
+        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-1,2,26-00")
+        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-1,2,26-14")
 
-        self.assertRaises(Purple97Error, Purple97.from_key_sheet, "bad string")
-        self.assertRaises(Purple97Error, Purple97.from_key_sheet, "1-2-1,2,26-14")
-        self.assertRaises(Purple97Error, Purple97.from_key_sheet, "a-9,2,20-13")
-        self.assertRaises(Purple97Error, Purple97.from_key_sheet, "1-a,2,20-13")
-        self.assertRaises(Purple97Error, Purple97.from_key_sheet, "1-9,a,20-13")
-        self.assertRaises(Purple97Error, Purple97.from_key_sheet, "1-9,2,a-13")
-        self.assertRaises(Purple97Error, Purple97.from_key_sheet, "1-9,2,20-a3")
-        self.assertRaises(Purple97Error, Purple97.from_key_sheet, "1-9,2,20-1a")
-        self.assertRaises(Purple97Error, Purple97.from_key_sheet, "1-9,2,20-123")
+        self.assertRaises(Purple97Error, Purple97.from_keysheet, "bad string")
+        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-2-1,2,26-14")
+        self.assertRaises(Purple97Error, Purple97.from_keysheet, "a-9,2,20-13")
+        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-a,2,20-13")
+        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-9,a,20-13")
+        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-9,2,a-13")
+        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-9,2,20-a3")
+        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-9,2,20-1a")
+        self.assertRaises(Purple97Error, Purple97.from_keysheet, "1-9,2,20-123")
 
     def test_decrypt_part_1_message(self):
         self.assertEqual(len(ciphertext), len(plaintext))
 
-        machine = Purple97.from_key_sheet(
-            switches="9-1,24,6-23",
-            alphabet="NOKTYUXEQLHBRMPDICJASVWGZF")
+        machine = Purple97.from_keysheet(
+            settings="9-1,24,6-23",
+            plugboard="NOKTYUXEQLHBRMPDICJASVWGZF")
 
         self.assertEqual(plaintext, machine.decrypt(ciphertext))
 
     def test_encrypt_part_1_message(self):
         self.assertEqual(len(ciphertext), len(plaintext))
 
-        machine = Purple97.from_key_sheet(
-            switches="9-1,24,6-23",
-            alphabet="NOKTYUXEQLHBRMPDICJASVWGZF")
+        machine = Purple97.from_keysheet(
+            settings="9-1,24,6-23",
+            plugboard="NOKTYUXEQLHBRMPDICJASVWGZF")
 
         # substitute illegible characters with "X"s.
         plaintext_ = plaintext.replace("-", "X")
