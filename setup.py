@@ -22,7 +22,7 @@ setuptools.setup(
     version=system97.__version__,
     author="Hugh Coleman",
     author_email="33557709+hughcoleman@users.noreply.github.com",
-    url="https://bitbucket.org/bgneal/purple/",
+    url="https://github.com/hughcoleman/system97",
     license="MIT",
     description="A historically accurate simulator of the \"System 97\" or Type-B Cipher Machine.",
     long_description=long_description,
