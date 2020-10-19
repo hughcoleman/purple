@@ -26,6 +26,7 @@ setuptools.setup(
     license="MIT",
     description="A historically accurate simulator of the \"System 97\" or Type-B Cipher Machine.",
     long_description=long_description,
+    long_description_content_type="text/markdown",
     packages=["system97"],
     scripts=["scripts/system97"],
     classifiers = [
