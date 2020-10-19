@@ -5,12 +5,12 @@
 # Copyright (c) 2014 Brian Neal
 # Copyright (c) 2020 Hugh Coleman
 #
-# This file is part of hughcoleman/purple, a historically accurate simulator of
-# the PURPLE (Type-B) Cipher Machine. It is released under the MIT License (see
-# LICENSE.)
+# This file is part of hughcoleman/system97, a historically accurate simulator 
+# of the "System 97" or Type-B Cipher Machine. It is released under the MIT 
+# License (see LICENSE.)
 
 import setuptools
-import purple
+import system97
 
 from pathlib import Path
 
@@ -18,16 +18,16 @@ with open(Path(__file__).parent / "README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="purple",
-    version=purple.__version__,
+    name="system97",
+    version=system97.__version__,
     author="Hugh Coleman",
     author_email="33557709+hughcoleman@users.noreply.github.com",
     url="https://bitbucket.org/bgneal/purple/",
     license="MIT",
-    description="A historically accurate simulator of the PURPLE (Type-B) Cipher Machine.",
+    description="A historically accurate simulator of the \"System 97\" or Type-B Cipher Machine.",
     long_description=long_description,
-    packages=["purple"],
-    scripts=["scripts/purple"],
+    packages=["system97"],
+    # scripts=["scripts/purple"],
     classifiers = [
         "Development Status :: 4 - Beta",
         "Environment :: Console",

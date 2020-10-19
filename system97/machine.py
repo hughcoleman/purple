@@ -5,24 +5,25 @@
 # Copyright (c) 2013 - 2014 Brian Neal
 # Copyright (c) 2020 Hugh Coleman
 # 
-# This file is part of hughcoleman/purple, a historically accurate simulator of
-# the PURPLE (Type-B) Cipher Machine. It is released under the MIT License (see
-# LICENSE.)
+# This file is part of hughcoleman/system97, a historically accurate simulator 
+# of the "System 97" or Type-B Cipher Machine. It is released under the MIT 
+# License (see LICENSE.)
 
-""" This implements Purple97, a historically accurate simulator of the PURPLE 
-(Type-B) Cipher Machine.
+""" This implements System97, a historically accurate simulator of the 
+"System 97" or Type-B Cipher Machine.
 """
 
-import purple.switch
-import purple.logic
+import system97.switch
+import system97.logic
 
 import string
 
-class Purple97:
-    """ This class simulates the top-level behavior of the PURPLE cipher
-    machine.
+class System97:
+    """ This class implements a historically accurate simulator of the 
+    "System 97" or Type-B Cipher Machine.
 
     """
+
     CHARSET = set(string.ascii_uppercase)
 
     def decrypt(self, ciphertext):
@@ -107,20 +108,20 @@ class Purple97:
                        plugboard="AEIOUYBCDFGHJKLMNPQRSTVWXZ"):
 
         # initialize switches with the supplied starting positions
-        self.sixes = purple.switch.SteppingSwitch(
-            purple.logic.SIXES, positions[6]
+        self.sixes = system97.switch.SteppingSwitch(
+            system97.logic.SIXES, positions[6]
         )
         self.twenties = [
             None, # so that the twenties are each indexed into the list by 
                   # their numerical value
-            purple.switch.SteppingSwitch(
-                purple.logic.TWENTIES_I, positions[20][0]
+            system97.switch.SteppingSwitch(
+                system97.logic.TWENTIES_I, positions[20][0]
             ),
-            purple.switch.SteppingSwitch(
-                purple.logic.TWENTIES_II, positions[20][1]
+            system97.switch.SteppingSwitch(
+                system97.logic.TWENTIES_II, positions[20][1]
             ),
-            purple.switch.SteppingSwitch(
-                purple.logic.TWENTIES_III, positions[20][2]
+            system97.switch.SteppingSwitch(
+                system97.logic.TWENTIES_III, positions[20][2]
             )
         ]
 

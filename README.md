@@ -1,7 +1,7 @@
-<h3 align="center">purple</h3>
+<h3 align="center">system97</h3>
 
 <p align="center">
-  <b>A historically accurate simulator of the PURPLE (Type-B) Cipher Machine.</b>
+  <b>A historically accurate simulator of the "System 97" or Type-B Cipher Machine.</b>
 </p>
 
 ###### Usage
@@ -15,4 +15,4 @@ N/A
 
 ###### License
 
-The original project by Brian Neal was released under the [MIT License](https://choosealicense.com/licenses/mit/). Modifications are also licensed under MIT.
+The original project by Brian Neal, `purple`, was released under the [MIT License](https://choosealicense.com/licenses/mit/). Modifications are also licensed under MIT.

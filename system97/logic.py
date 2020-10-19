@@ -5,12 +5,12 @@
 # Copyright (c) 2013 Brian Neal
 # Copyright (c) 2020 Hugh Coleman
 # 
-# This file is part of hughcoleman/purple, a historically accurate simulator of
-# the PURPLE (Type-B) Cipher Machine. It is released under the MIT License (see
-# LICENSE.)
+# This file is part of hughcoleman/system97, a historically accurate simulator 
+# of the "System 97" or Type-B Cipher Machine. It is released under the MIT 
+# License (see LICENSE.)
 
 """ This file encodes the wiring logic of the four stepping switches used in 
-the PURPLE cipher machine. This information was extracted from the following 
+the Type-B cipher machine. This information was extracted from the following 
 publication.
 
     Freeman, W., Sullivan, G., & Weierud, F. (2003). "Purple Revealed: 
