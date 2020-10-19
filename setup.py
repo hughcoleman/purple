@@ -27,7 +27,7 @@ setuptools.setup(
     description="A historically accurate simulator of the \"System 97\" or Type-B Cipher Machine.",
     long_description=long_description,
     packages=["system97"],
-    # scripts=["scripts/purple"],
+    scripts=["scripts/system97"],
     classifiers = [
         "Development Status :: 4 - Beta",
         "Environment :: Console",
