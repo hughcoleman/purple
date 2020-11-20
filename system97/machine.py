@@ -31,23 +31,22 @@ class System97:
 
         plaintext = []
         for c in ciphertext:
-
             if (c in ["-", "/", " "]):
+                # illegible in the transcription
                 plaintext.append(c)
-                self.step()
-                continue
-
-            n = self.plugboard.index(c)
-            if (n < 6):
-                x = self.sixes.decrypt(n)
             else:
-                x = self.twenties[1].decrypt(
-                        self.twenties[2].decrypt(
-                            self.twenties[3].decrypt(n)
+                n = self.plugboard.index(c)
+                if (n < 6):
+                    x = self.sixes.decrypt(n)
+                else:
+                    x = self.twenties[1].decrypt(
+                            self.twenties[2].decrypt(
+                                self.twenties[3].decrypt(n)
+                            )
                         )
-                    )
 
-            plaintext.append(self.plugboard[x])
+                plaintext.append(self.plugboard[x])
+            
             self.step()
 
         return ''.join(plaintext)
@@ -57,23 +56,21 @@ class System97:
 
         ciphertext = []
         for c in plaintext:
-
             if (c in ["-", "/", " "]):
                 ciphertext.append(c)
-                self.step()
-                continue
-
-            n = self.plugboard.index(c)
-            if n < 6:
-                x = self.sixes.encrypt(n)
             else:
-                x = self.twenties[3].encrypt(
-                        self.twenties[2].encrypt(
-                            self.twenties[1].encrypt(n)
+                n = self.plugboard.index(c)
+                if n < 6:
+                    x = self.sixes.encrypt(n)
+                else:
+                    x = self.twenties[3].encrypt(
+                            self.twenties[2].encrypt(
+                                self.twenties[1].encrypt(n)
+                            )
                         )
-                    )
 
-            ciphertext.append(self.plugboard[x])
+                ciphertext.append(self.plugboard[x])
+            
             self.step()
 
         return ''.join(ciphertext)
