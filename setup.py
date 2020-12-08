@@ -5,8 +5,8 @@
 # Copyright (c) 2014 Brian Neal
 # Copyright (c) 2020 Hugh Coleman
 #
-# This file is part of hughcoleman/system97, a historically accurate simulator 
-# of the "System 97" or Type-B Cipher Machine. It is released under the MIT 
+# This file is part of hughcoleman/system97, a historically accurate simulator
+# of the "System 97" or Type-B Cipher Machine. It is released under the MIT
 # License (see LICENSE.)
 
 import setuptools
@@ -24,12 +24,12 @@ setuptools.setup(
     author_email="33557709+hughcoleman@users.noreply.github.com",
     url="https://github.com/hughcoleman/system97",
     license="MIT",
-    description="A historically accurate simulator of the \"System 97\" or Type-B Cipher Machine.",
+    description='A historically accurate simulator of the "System 97" or Type-B Cipher Machine.',
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=["system97"],
     scripts=["scripts/system97"],
-    classifiers = [
+    classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Console",
         "Intended Audience :: End Users/Desktop",
@@ -50,5 +50,5 @@ setuptools.setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Utilities",
     ],
-    python_requires=">=3.8"
+    python_requires=">=3.8",
 )

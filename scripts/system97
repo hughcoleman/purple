@@ -4,9 +4,9 @@
 # system97
 # Copyright (c) 2014 Brian Neal
 # Copyright (c) 2020 Hugh Coleman
-# 
-# This file is part of hughcoleman/system97, a historically accurate simulator 
-# of the "System 97" or Type-B Cipher Machine. It is released under the MIT 
+#
+# This file is part of hughcoleman/system97, a historically accurate simulator
+# of the "System 97" or Type-B Cipher Machine. It is released under the MIT
 # License (see LICENSE.)
 
 import system97.machine
@@ -21,7 +21,7 @@ def parse_shorthand(settings):
 
     if not (groups := re.search(shorthand, settings)):
         raise ValueError("Unrecognized shorthand format.")
-    
+
     # Extract the inital stepper position information from the shorthand
     # notation.
     positions = {
@@ -47,18 +47,18 @@ if __name__ == "__main__":
         help="perform an encryption")
     group.add_argument("-d", "--decrypt", action="store_true",
         help="perform a decryption")
-    
+
     parser.add_argument("-s", "--switches",
         help="switch settings in shorthand notation; e.g. 9-1,24,6-23")
     parser.add_argument("-p", "--plugboard",
         help="plugboard wiring; e.g. NOKTYUXEQLHBRMPDICJASVWGZF")
-    
+
     parser.add_argument("input", type=argparse.FileType("r"),
         help="input text to encrypt/decrypt")
 
     args = parser.parse_args()
 
-    # Create an instance of System97 with the supplied parameters. 
+    # Create an instance of System97 with the supplied parameters.
     # `parse_shorthand` will return a dictionary with keys that can be expanded
     # to **kwargs.
     machine = system97.machine.System97(
@@ -68,7 +68,6 @@ if __name__ == "__main__":
 
     if args.encrypt:
         output = machine.encrypt(args.input.read())
-
     elif args.decrypt:
         output = machine.decrypt(args.input.read())
 
