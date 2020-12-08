@@ -33,9 +33,10 @@ with open(os.path.join(samples, "plaintext"), "r") as fh:
 if (not plaintext) or (not ciphertext):
     raise RuntimeError("could not read plaintext/ciphertext samples")
 
+
 class TestSystem97(unittest.TestCase):
     def test__encrypt(self):
-        """ Ensure that System97.encrypt properly encrypts the supplied
+        """Ensure that System97.encrypt properly encrypts the supplied
         plaintext.
         """
 
@@ -48,7 +49,7 @@ class TestSystem97(unittest.TestCase):
         self.assertEqual(ciphertext, machine.encrypt(plaintext))
 
     def test__decrypt(self):
-        """ Ensure that System97.decrypt properly decrypts the supplied
+        """Ensure that System97.decrypt properly decrypts the supplied
         ciphertext.
         """
 

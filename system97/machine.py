@@ -20,7 +20,7 @@ import string
 
 
 class System97:
-    """ This class implements a historically accurate simulator of the
+    """This class implements a historically accurate simulator of the
     "System 97" or Type-B Cipher Machine.
 
     """
@@ -73,7 +73,7 @@ class System97:
         return "".join(ciphertext)
 
     def step(self):
-        """ Step the stepping switches.
+        """Step the stepping switches.
 
         After every character, only one of the three twenties switches steps.
         The switch that steps is determined by the following rules.
@@ -105,11 +105,15 @@ class System97:
     ):
 
         # initialize switches with the supplied starting positions
-        self.sixes = system97.switch.SteppingSwitch(system97.logic.SIXES, positions[6])
+        self.sixes = system97.switch.SteppingSwitch(
+            system97.logic.SIXES, positions[6]
+        )
         self.twenties = [
             None,  # so that the twenties are each indexed into the list by
             # their numerical value
-            system97.switch.SteppingSwitch(system97.logic.TWENTIES_I, positions[20][0]),
+            system97.switch.SteppingSwitch(
+                system97.logic.TWENTIES_I, positions[20][0]
+            ),
             system97.switch.SteppingSwitch(
                 system97.logic.TWENTIES_II, positions[20][1]
             ),

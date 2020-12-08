@@ -17,7 +17,7 @@ import system97.logic
 
 class TestSwitch(unittest.TestCase):
     def test__illegal_routing_logic(self):
-        """ Ensure that SteppingSwitch.__init__ raises a ValueError if an
+        """Ensure that SteppingSwitch.__init__ raises a ValueError if an
         incorrectly-balanced routing matrix is supplied.
         """
 
@@ -30,7 +30,7 @@ class TestSwitch(unittest.TestCase):
         )
 
     def test__illegal_arm_position(self):
-        """ Ensure that SteppingSwitch.__init__ raises a ValueError if an
+        """Ensure that SteppingSwitch.__init__ raises a ValueError if an
         illegal initial arm position is supplied.
         """
 
@@ -44,7 +44,7 @@ class TestSwitch(unittest.TestCase):
             )
 
     def test__step(self):
-        """ Ensure that SteppingSwitch.step correctly tracks the position of
+        """Ensure that SteppingSwitch.step correctly tracks the position of
         the arm.
         """
         switch = system97.switch.SteppingSwitch(system97.logic.SIXES)
@@ -54,7 +54,7 @@ class TestSwitch(unittest.TestCase):
             switch.step()
 
     def test__encrypt(self):
-        """ Ensure that SteppingSwitch.encrypt properly routes the supplied
+        """Ensure that SteppingSwitch.encrypt properly routes the supplied
         signal.
         """
 
@@ -62,12 +62,14 @@ class TestSwitch(unittest.TestCase):
 
         for position in range(25):
             for pt in range(6):
-                self.assertEqual(system97.logic.SIXES[switch.encrypt(pt)][position], pt)
+                self.assertEqual(
+                    system97.logic.SIXES[switch.encrypt(pt)][position], pt
+                )
 
             switch.step()
 
     def test__decrypt(self):
-        """ Ensure that SteppingSwitch.decrypt properly routes the supplied
+        """Ensure that SteppingSwitch.decrypt properly routes the supplied
         signal.
         """
 
@@ -75,6 +77,8 @@ class TestSwitch(unittest.TestCase):
 
         for position in range(25):
             for ct in range(6):
-                self.assertEqual(system97.logic.SIXES[ct][position], switch.decrypt(ct))
+                self.assertEqual(
+                    system97.logic.SIXES[ct][position], switch.decrypt(ct)
+                )
 
             switch.step()
