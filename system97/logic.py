@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 # logic.py
 # Copyright (c) 2013 Brian Neal
 # Copyright (c) 2020 Hugh Coleman
@@ -8,7 +7,6 @@
 # This file is part of hughcoleman/system97, a historically accurate simulator
 # of the "System 97" or Type-B Cipher Machine. It is released under the MIT
 # License (see LICENSE.)
-
 """ This file encodes the wiring logic of the four stepping switches used in
 the Type-B cipher machine. This information was extracted from the following
 publication.

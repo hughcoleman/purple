@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 # test_machine.py
 # Copyright (c) 2013 - 2014 Brian Neal
 # Copyright (c) 2020 Hugh Coleman
@@ -8,12 +7,10 @@
 # This file is part of hughcoleman/system97, a historically accurate simulator
 # of the "System 97" or Type-B Cipher Machine. It is released under the MIT
 # License (see LICENSE.)
-
+import os
 import unittest
 
 import system97.machine
-
-import os
 
 # This is the first part of the 14-part message which was delivered by the
 # Japanese to the U.S. Government on December 7, 1941. Illegible characters are

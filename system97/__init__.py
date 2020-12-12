@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 # __init__.py
 # Copyright (c) 2014 Brian Neal
 # Copyright (c) 2020 Hugh Coleman

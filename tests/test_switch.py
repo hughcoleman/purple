@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 # test_switch.py
 # Copyright (c) 2013 Brian Neal
 # Copyright (c) 2020 Hugh Coleman
@@ -8,11 +7,10 @@
 # This file is part of hughcoleman/system97, a historically accurate simulator
 # of the "System 97" or Type-B Cipher Machine. It is released under the MIT
 # License (see LICENSE.)
-
 import unittest
 
-import system97.switch
 import system97.logic
+import system97.switch
 
 
 class TestSwitch(unittest.TestCase):

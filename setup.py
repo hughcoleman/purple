@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 # setup.py
 # Copyright (c) 2014 Brian Neal
 # Copyright (c) 2020 Hugh Coleman
@@ -8,11 +7,11 @@
 # This file is part of hughcoleman/system97, a historically accurate simulator
 # of the "System 97" or Type-B Cipher Machine. It is released under the MIT
 # License (see LICENSE.)
+from pathlib import Path
 
 import setuptools
-import system97
 
-from pathlib import Path
+import system97
 
 with open(Path(__file__).parent / "README.md", "r") as fh:
     long_description = fh.read()
