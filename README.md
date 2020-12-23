@@ -1,7 +1,7 @@
 <h3 align="center">system97</h3>
 
 <p align="center">
-  <b>A historically accurate simulator of the "System 97" or Type-B Cipher Machine.</b>
+  <b>A historically accurate simulator of the "System 97" or Type-B Cipher Machine</b>
 </p>
 
 ###### Usage
